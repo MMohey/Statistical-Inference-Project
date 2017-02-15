@@ -2,7 +2,7 @@
 title: "Statistical Inference Project_Part 1"
 author: "Moh Ahmed"
 date: "04/02/2017"
-output: html_document
+output: pdf_document
 ---
 
 # Synopsis
@@ -13,14 +13,14 @@ This project investigates the exponential distribution in R and compare it with 
 
 In this part, a one thousand simulations will be perfomed on the distribution of means of 40 exponentials. Then the results are plotted. The following steps explain how the simulation was performed:
 
-1. Set the seed to an arbitrary value for reproducability.
+1. Set the seed to an arbitrary value for results reproducability.
 2. Set the parameters for the exponential distribution function rexp(n, rate), where n= 40 observations and rate = 0.2.
 3. Perform the 1000 simulations and store the results in matrix.
 4. Calculate the mean distribution of 40 exponentials for the 1000 simulations.
 5. Plot the results on a histogram.
 
 
-```{r, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(ggplot2) # load the plotting library
 
 # set the parameter
@@ -38,7 +38,7 @@ ggplot(exp_dist_mn, aes(mn)) + geom_histogram() + xlab('Mean') #ploting the resu
 
 # Theoretical Mean compared to the Sample Mean
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 sample_mn <-  mean(exp_dist_mn$mn)
 theoretical_mn <- 1/lambda
 diff <-  theoretical_mn - sample_mn
@@ -50,21 +50,27 @@ As shown above, the theoretical mean = 1/ lambda = 5; while the sample mean = 5.
 
 As can be seen in the following graph, the difference between the theoretical mean and the sample mean is very small. 
 
-```{r, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 sample_mn <-  mean(exp_dist_mn$mn)
 theoretical_mn <- 1/lambda
 diff_mn <-  theoretical_mn - sample_mn
 diff_mn #The difference between sample mean and theoretical mean
 
 mns_mat <- data.frame(value = c(theoretical_mn, sample_mn), type= c('Theoretical', 'Sample') )
-ggplot(exp_dist_mn, aes(mn)) + geom_histogram() + geom_vline(aes(xintercept=value, color=type),data=mns_mat, lwd = 1, show.legend = T) + 
-    scale_color_manual("Mean type",
-                       values=c("Theoretical"="yellow","Sample"="red"))
+
+ggplot(exp_dist_mn, aes(mn)) + geom_histogram() +
+    geom_vline(
+    aes(xintercept = value, color = type),
+    data = mns_mat,
+    lwd = 1,
+    show.legend = T
+    ) +
+    scale_color_manual("Mean type", values = c("Theoretical" = "yellow", "Sample" = "red"))
 ```
 
 # Theoretical Variance compared to the Sample Variance
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 theoretical_var <- ( (1/lambda) / sqrt(n) )^2
 sample_var <- var(exp_dist_mn)
 diff_var <- theoretical_var - sample_var
@@ -77,14 +83,28 @@ As shown above, the theoretical variance = 0.625; while the sample variance = 0.
 
 In this section, the sample distribution and the theoretical distribution are both plotted on the same scale. As shown in the figure below the sample means distribution closely match the theoretical means distribution. Hence, sample mean distribution follows a normal distribution.
 
-```{r, warning=FALSE}
- ggplot(exp_dist_mn, aes(mn)) + geom_histogram( aes(y= ..density..),alpha = 0.5) + geom_vline(aes(xintercept=value, color=type),data=mns_mat, lwd = 1, show.legend = T) +    scale_color_manual("Mean type", values=c("Theoretical"="yellow","Sample"="red")) + stat_function(fun = dnorm, args = list(mean = theoretical_mn, sd = sqrt(theoretical_var)), colour = 'yellow', size=1) + geom_density(color = 'red', size =1) 
+```{r, message=FALSE, warning=FALSE}
+ggplot(exp_dist_mn, aes(mn)) + geom_histogram(aes(y = ..density..), alpha = 0.5) +
+    geom_vline(
+    aes(xintercept = value, color = type),
+    data = mns_mat,
+    lwd = 1,
+    show.legend = T
+    ) +
+    scale_color_manual("Mean type", values = c("Theoretical" = "yellow", "Sample" = "red")) +
+    stat_function(
+    fun = dnorm,
+    args = list(mean = theoretical_mn, sd = sqrt(theoretical_var)),
+    colour = 'yellow',
+    size = 1
+    ) +
+    geom_density(color = 'red', size = 1) 
 ```
 
 Also shown below the Q-Q plot, or quantile-quantile plot, which is a graphical tool to help us assess if a set of data plausibly came from some theoretical distribution such as a Normal. The figure below supports the normality of the distribution.
 
-```{r, warning=FALSE}
-   qqnorm(exp_dist_mn$mn,  main ="Normal Q-Q Plot", col = 'red')
-   qqline(exp_dist_mn$mn,  col = "yellow", lwd = 2)
+```{r, message=FALSE, warning=FALSE}
+qqnorm(exp_dist_mn$mn,  main ="Normal Q-Q Plot", col = 'red')
+qqline(exp_dist_mn$mn,  col = "yellow", lwd = 2)
 ```
 
