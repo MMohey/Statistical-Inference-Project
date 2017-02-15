@@ -7,7 +7,7 @@ output: html_document
 
 # Overview
 
-This report analyses the toothgrowth dataset in the R datasets packages. The aim is to perform basic exploratory data analyses and provide a basic summary of the data. Then, using confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose.
+This report analyses the toothgrowth dataset in the R datasets packages. The aim is to perform basic exploratory data analyses and provide a basic summary of the data. Then, using confidence intervals and/or hypothesis tests to compare tooth growth by Supplement type and Dose in milligrams/day.
 
 In this dataset, the response variable is the length of odontoblasts (cells responsible for tooth growth) in 60 guinea pigs. Each animal received one of three dose levels of vitamin C (0.5, 1, and 2 mg/day) by one of two delivery methods, either orange juice or ascorbic acid. 
 
@@ -19,7 +19,7 @@ ToothGrowth data is a data frame with 60 observations on 3 variables.
 [,2]	supp	factor	Supplement type (VC or OJ).
 [,3]	dose	numeric	Dose in milligrams/day
 
-```{r, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(datasets)
 library(gridExtra)
@@ -34,23 +34,62 @@ summary(tooth_growth_dt)
 # Exploratory Data Analyses
 
 
-```{r, warning=FALSE}
-tooth_growth_dt <- data.frame(len = tooth_growth_dt$len, supp = tooth_growth_dt$supp, dose = as.factor(tooth_growth_dt$dose))
-
-plot1 <- ggplot(tooth_growth_dt, aes(x=dose, y=len, fill = dose))+ geom_boxplot() + facet_grid(.~tooth_growth_dt$supp) + ggtitle( 'Tooth Length vs Dose vs Supplement') + labs(fill='Dose (mg)') + xlab('Dose (mg)') + ylab('Tooth Length (mm)') + theme(legend.position = 'none')  +  theme(plot.title = element_text( size=12, hjust=0)) + theme(axis.title = element_text( size=8)) 
-
-plot2 <- ggplot(tooth_growth_dt, aes(x=dose, y=len, fill = dose))+ geom_boxplot() +  ggtitle('Tooth Length vs Dose') + labs(fill='Dose (mg)') + xlab('Dose (mg)') + ylab('Tooth Length (mm)') +  theme(plot.title = element_text( size=12, hjust=0)) + theme(axis.title = element_text( size=8))
-
-plot3 <- ggplot(tooth_growth_dt, aes(x=supp, y=len, fill = supp))+ geom_boxplot() + facet_grid(.~tooth_growth_dt$dose) + ggtitle('Tooth Length vs Supplement vs Dose') + labs(fill='Supplement Type') + xlab('Supplement Type') + ylab('Tooth Length (mm)') + theme(legend.position = 'none') +  theme(plot.title = element_text( size=12, hjust=0)) + theme(axis.title = element_text( size=8))
-
-plot4 <- ggplot(tooth_growth_dt, aes(x=supp, y=len, fill = supp))+ geom_boxplot()  + ggtitle('Tooth Length vs Supplement') + labs(fill='Supplement Type') + xlab('Supplement Type') + ylab('Tooth Length (mm)') +  theme(plot.title = element_text( size=12, hjust=0)) + theme(axis.title = element_text( size=8))
-
-grid.arrange(plot1,plot2,plot3,plot4, nrow= 2, ncol = 2)
+```{r, message=FALSE, warning=FALSE}
+tooth_growth_dt <-
+    data.frame(
+    len = tooth_growth_dt$len,
+    supp = tooth_growth_dt$supp,
+    dose = as.factor(tooth_growth_dt$dose)
+    )
+    
+    plot1 <-
+    ggplot(tooth_growth_dt, aes(x = dose, y = len, fill = dose)) +
+    geom_boxplot() +
+    facet_grid(. ~ tooth_growth_dt$supp) +
+    ggtitle('Tooth Length vs Dose vs Supplement') +
+    labs(fill = 'Dose (mg)') +
+    xlab('Dose (mg)') +
+    ylab('Tooth Length (mm)') +
+    theme(legend.position = 'none')  +
+    theme(plot.title = element_text(size = 12, hjust = 0)) +
+    theme(axis.title = element_text(size = 8))
+    
+    plot2 <-
+    ggplot(tooth_growth_dt, aes(x = dose, y = len, fill = dose)) +
+    geom_boxplot() +  ggtitle('Tooth Length vs Dose') +
+    labs(fill = 'Dose (mg)') +
+    xlab('Dose (mg)') +
+    ylab('Tooth Length (mm)') +
+    theme(plot.title = element_text(size = 12, hjust = 0)) +
+    theme(axis.title = element_text(size = 8))
+    
+    plot3 <-
+    ggplot(tooth_growth_dt, aes(x = supp, y = len, fill = supp)) +
+    geom_boxplot() +
+    facet_grid(. ~ tooth_growth_dt$dose) +
+    ggtitle('Tooth Length vs Supplement vs Dose') +
+    labs(fill = 'Supplement Type') + xlab('Supplement Type') +
+    ylab('Tooth Length (mm)') +
+    theme(legend.position = 'none') +
+    theme(plot.title = element_text(size = 12, hjust = 0)) +
+    theme(axis.title = element_text(size = 8))
+    
+    plot4 <-
+    ggplot(tooth_growth_dt, aes(x = supp, y = len, fill = supp)) +
+    geom_boxplot()  +
+    ggtitle('Tooth Length vs Supplement') +
+    labs(fill = 'Supplement Type') +
+    xlab('Supplement Type') +
+    ylab('Tooth Length (mm)') +
+    theme(plot.title = element_text(size = 12, hjust = 0)) +
+    theme(axis.title = element_text(size = 8))
+    
+    grid.arrange(plot1, plot2, plot3, plot4, nrow = 2, ncol = 2)
 
 ```
 
 
-```{r, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 vc_data <- tooth_growth_dt[tooth_growth_dt$supp=='VC',]
 oj_data <- tooth_growth_dt[tooth_growth_dt$supp=='OJ',]
 
