@@ -2,7 +2,7 @@
 title: "Statistical Inference Project_Part 2"
 author: "Moh Ahmed"
 date: "06/02/2017"
-output: html_document
+output: pdf_document
 ---
 
 # Overview
@@ -88,14 +88,67 @@ tooth_growth_dt <-
 
 ```
 
+# Hypotheses Testing
+
+## Hypothesis 1: Orange Juice vs Ascorbic Acid effect on Tooth growth
+
+Our null hypothesis states that the effect supplement type is the same on the tooth growth length. 
+
+Our alternative hypothesis states that the effect supplement type is not the same on the tooth growth length. 
 
 ```{r, message=FALSE, warning=FALSE}
-vc_data <- tooth_growth_dt[tooth_growth_dt$supp=='VC',]
-oj_data <- tooth_growth_dt[tooth_growth_dt$supp=='OJ',]
-
-t.test(vc_data$len, oj_data$len)
+t.test(len~supp, data = tooth_growth_dt)
 ```
 
+Performing T test, **we fail to reject the null hypothesis** since our p-value > 0.05, hence the difference is not statistically significant.
 
 
+## Hypothesis 2: Dosage of 0.5 mg/day of Orange Juice vs Ascorbic Acid effect on Tooth growth
 
+Our null hypothesis states that at dosage of 0.5 mg/day, the effect of supplement type is the same on the tooth growth length. 
+
+Our alternative hypothesis states that at dosage 0f 0.5 mg/day, the effect of supplement type on the tooth growth length is not the same. 
+
+```{r, message=FALSE, warning=FALSE}
+t.test(len~supp, data = subset(tooth_growth_dt, dose ==0.5))
+```
+
+Performing T test, **we reject the null hypothesis** since our p-value < 0.05, hence the difference is statistically significant.
+
+## Hypothesis 3: Dosage of 1.0 mg/day of Orange Juice vs Ascorbic Acid effect on Tooth growth
+
+Our null hypothesis states that at dosage of 1.0 mg/day, the effect of supplement type is the same on the tooth growth length. 
+
+Our alternative hypothesis states that at dosage 0f 1.0 mg/day, the effect of supplement type on the tooth growth length is not the same. 
+
+```{r, message=FALSE, warning=FALSE}
+t.test(len~supp, data = subset(tooth_growth_dt, dose ==1))
+```
+
+Performing T test, **we reject the null hypothesis** since our p-value < 0.05, hence the difference is statistically significant.
+
+## Hypothesis 4: Dosage of 2.0 mg/day of Orange Juice vs Ascorbic Acid effect on Tooth growth
+
+Our null hypothesis states that at dosage of 2.0 mg/day, the effect of supplement type is the same on the tooth growth length. 
+
+Our alternative hypothesis states that at dosage 0f 2.0 mg/day, the effect of supplement type on the tooth growth length is not the same. 
+
+```{r, message=FALSE, warning=FALSE}
+t.test(len~supp, data = subset(tooth_growth_dt, dose ==2.0))
+```
+
+Performing T test, **we fail to reject the null hypothesis** since our p-value > 0.05, hence the difference is not statistically significant.
+
+# Conculusions
+
+From Hypothesis 1, we cannot decide whether Orange Juice or Ascorbic Acid is more effective on tooth growth. Since the difference in their effect is not statistically significant. 
+
+In addition from Hypothesis 4, we see that at dosage 2.0 mg/day, the effect of the supplement type on tooth growth length is not statistically significant.
+
+However from Hypothesis 2 and 3, we can deduce that Orange Juice at dosage of 0.5 mg/day and 1 mg/day is more effective on tooth growth length than its Ascorbic Acid. This is because the difference in their effectiveness is statistically significant.
+
+
+# Assumptions
+
+1. The data follows a normal distribution.
+2. The samples are randomly distributed. 
